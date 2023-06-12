@@ -13,17 +13,16 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
 	defer conn.Close()
 
-	mustCopy(os.Stdout,conn)
+	mustCopy(os.Stdout, conn)
 
 }
 
+func mustCopy(dst io.Writer, src io.Reader) {
 
-func mustCopy(dst io.Writer,src io.Reader) {
-
-	_,err := io.Copy(dst,src)
+	_, err := io.Copy(dst, src)
 	if err != nil {
 		fmt.Println(err)
 	}
