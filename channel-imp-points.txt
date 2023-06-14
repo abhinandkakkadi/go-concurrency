@@ -1,0 +1,8 @@
+the channel which create the channel is considered as the owner of that channel, only that go routine should have the ability to write and close that channel, other 
+go routines should only read from that channel
+
+ownership avoid 
+deadlocks 
+closing a nil channel
+writing to a close channel
+closing a channel more that once
