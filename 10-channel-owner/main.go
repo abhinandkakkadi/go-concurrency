@@ -6,7 +6,7 @@ import "fmt"
 
 func main() {
 
-	initialize := func() <-chan int {
+	owner := func() <-chan int {
 
 		ch := make(chan int)
 
@@ -20,7 +20,7 @@ func main() {
 		return ch
 	}
 
-	pass := func(ch <-chan int) {
+	consumer := func(ch <-chan int) {
 		
 		for val := range ch {
 			fmt.Println("the values are ",val)
@@ -28,6 +28,8 @@ func main() {
 	}
 	// here we are calling initialize function which return back a receive only channel which is being passed on to  pass()
 	// initialize and pass is function expression which can be called in form of a normal function
-	ch := initialize()
-	pass(ch)
+	// here the initialize is the channel owner so by convention only it can create send and close the channel. 
+	// al the other function can only receive from the channel
+	ch := owner()
+	consumer(ch)
 }
