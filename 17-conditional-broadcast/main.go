@@ -27,7 +27,7 @@ func main() {
 			wg.Wait()
 		}
 
-		fmt.Println("wait for one record : ",sharedRes["one"])
+		fmt.Println("wait for one record : ", sharedRes["one"])
 		c.L.Unlock()
 	}()
 
@@ -39,7 +39,7 @@ func main() {
 			c.Wait()
 		}
 
-		fmt.Println("wait for 2 records : ",sharedRes["two"])
+		fmt.Println("wait for 2 records : ", sharedRes["two"])
 		c.L.Unlock()
 	}()
 

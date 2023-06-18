@@ -6,9 +6,6 @@ import (
 	"sync/atomic"
 )
 
-
-
-
 func main() {
 
 	var wg sync.WaitGroup
@@ -16,16 +13,16 @@ func main() {
 
 	for i := 0; i < 50; i++ {
 
-		// if atomic is not given counter variable goes through a race condition since multiple function are 
+		// if atomic is not given counter variable goes through a race condition since multiple function are
 		// trying to access the same value
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 			for i := 0; i < 1000; i++ {
-				atomic.AddUint64(&counter,1)
+				atomic.AddUint64(&counter, 1)
 			}
 
-		}() 
+		}()
 	}
 
 	wg.Wait()

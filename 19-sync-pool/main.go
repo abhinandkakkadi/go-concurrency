@@ -7,14 +7,12 @@ import (
 	"sync"
 )
 
-
-var bufPool = sync.Pool {
+var bufPool = sync.Pool{
 	New: func() interface{} {
 		fmt.Println("allocating new bytes.Buffer")
 		return new(bytes.Buffer)
 	},
 }
-
 
 func log(w io.Writer, debug string) {
 

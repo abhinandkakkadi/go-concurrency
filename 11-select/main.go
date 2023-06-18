@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-
-
 func main() {
 
 	ch1 := make(chan string)
@@ -26,10 +24,10 @@ func main() {
 		// here whichever one is ready will be executed. In this case since the second go routine have a lesser sleep time
 		// that case will be met and printed first and since we have provided a for loop i will wait for the next condition is met
 		// which is the data that is sent over the other channel
-		select{
-		case m1 := <- ch1:
+		select {
+		case m1 := <-ch1:
 			fmt.Println(m1)
-		case m2 := <- ch2:
+		case m2 := <-ch2:
 			fmt.Println(m2)
 		}
 
