@@ -5,46 +5,43 @@ import (
 	"sync"
 )
 
-
-
 func generator(done <-chan struct{}, nums ...int) <-chan int {
 
 	out := make(chan int)
 
-	go func(){
+	go func() {
 		defer close(out)
-		for _,n := range nums {
+		for _, n := range nums {
 			select {
 			case out <- n:
-			case <- done:
+			case <-done:
 				return
 			}
 		}
 	}()
 
 	return out
-}	
+}
 
-
-func square(done <-chan struct{},ch <-chan int) <-chan int  {
+func square(done <-chan struct{}, ch <-chan int) <-chan int {
 
 	out := make(chan int)
 
-	go func(){
+	go func() {
 		defer close(out)
 		for n := range ch {
-			select{
-				case out <- n*n:
-				case <- done:
-					return
-			} 
+			select {
+			case out <- n * n:
+			case <-done:
+				return
+			}
 		}
 	}()
 
 	return out
 }
 
-func merge(done <-chan struct{},chs ...<-chan int) <-chan int {
+func merge(done <-chan struct{}, chs ...<-chan int) <-chan int {
 
 	out := make(chan int)
 	var wg sync.WaitGroup
@@ -54,20 +51,20 @@ func merge(done <-chan struct{},chs ...<-chan int) <-chan int {
 		for n := range ch {
 
 			select {
-			case 	out <- n:
-			case <- done:
-					return
+			case out <- n:
+			case <-done:
+				return
 			}
-		
+
 		}
 	}
 
 	wg.Add(len(chs))
-	for _,ch := range chs {
+	for _, ch := range chs {
 		go output(ch)
 	}
 
-	go func(){
+	go func() {
 		wg.Wait()
 		close(out)
 
@@ -81,10 +78,10 @@ func main() {
 	done := make(chan struct{})
 	defer close(done)
 
-	in := generator(done,1,2)
-	ch1 := square(done,in)
-	ch2 := square(done,in)
-	out := merge(done,ch1,ch2)
+	in := generator(done, 1, 2)
+	ch1 := square(done, in)
+	ch2 := square(done, in)
+	out := merge(done, ch1, ch2)
 
 	fmt.Println(<-out)
 }
