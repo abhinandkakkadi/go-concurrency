@@ -6,3 +6,6 @@ deadlocks
 closing a nil channel
 writing to a close channel
 closing a channel more that once
+
+
+when passing wg as arguments to function (go-routines) always pass them as pointer and never as duplicates. 
