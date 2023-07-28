@@ -5,7 +5,6 @@ import (
 	"sync"
 )
 
-
 var wg sync.WaitGroup
 
 type Income struct {
@@ -44,7 +43,7 @@ func main() {
 				temp += income.Amount
 				bankBalance = temp
 				balance.Unlock()
-				
+
 				fmt.Printf("On week %d, you earned $%d.00 from %s\n", week, income.Amount, income.Source)
 			}
 		}(i, income)
