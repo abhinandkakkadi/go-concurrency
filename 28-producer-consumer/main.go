@@ -84,18 +84,19 @@ func pizzeria(pizzaMaker *Producer) {
 	for {
 		currentPizza := makePizza(i)
 		//  try to make pizza's
+		// currentPizza will never be nil, But still let it be there
 		if currentPizza != nil {
 			i = currentPizza.pizzaNumber
 			select {
-				// we tried to make a pizza (we sent something to the data channel)
-				case pizzaMaker.data <- *currentPizza:
+			// we tried to make a pizza (we sent something to the data channel)
+			case pizzaMaker.data <- *currentPizza:
 
-				case quitChan := <- pizzaMaker.quit:
-					// close channels - (always close channel if created)
-					close(pizzaMaker.data)
-					// close quitChan that we have created above (intialzed means created)
-					close(quitChan)
-					return
+			case quitChan := <-pizzaMaker.quit:
+				// close channels - (always close channel if created)
+				close(pizzaMaker.data)
+				// close quitChan that we have created above (intialzed means created)
+				close(quitChan)
+				return
 			}
 		}
 
@@ -118,5 +119,42 @@ func main() {
 
 	// run the producer
 	go pizzeria(pizzaJob)
+
+	// create and run consumer
+	for i := range pizzaJob.data {
+
+		if i.pizzaNumber <= NumberOfPizzas {
+			if i.success {
+				fmt.Println(i.message)
+				fmt.Printf("Order #%d out for delivery!", i.pizzaNumber)
+			} else {
+				fmt.Println(i.message)
+				fmt.Println("The customer is not happy!")
+			}
+		} else {
+			fmt.Println("Done making pizza's...")
+			err := pizzaJob.Close()
+			if err != nil {
+				fmt.Println("*** error closing channel ***", err)
+			}
+		}
+	}
+
+	// the end
+	fmt.Println("Done making pizza")
+	fmt.Printf("We made %d pizzas, but failed to make %d, with %d attempts in total", pizzasMade, pizzasFailed, total)
+
+	switch {
+	case pizzasFailed > 9:
+		fmt.Println("What an awful day")
+	case pizzasFailed >= 6:
+		fmt.Println("It was not the best day")
+	case pizzasFailed >= 4:
+		fmt.Println("It was an average day")
+	case pizzasFailed >= 2:
+		fmt.Println("It was a pretty good day")
+	default:
+		fmt.Println("It was the best day")
+	}  
 
 }
