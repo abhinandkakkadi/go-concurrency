@@ -1,0 +1,11 @@
+A barber goes t barber shop with a waiting room with a fixed number of seats.
+
+if no one is in the waiting room, the barber goes to sleep.
+
+when clients shows up, if there are no seats available, he  or she leaves.
+
+if there is a seat available, and the barber is sleeping, the clients wakes p barber and gets a hair cut.
+
+if the barber is busy, the client takes a seat and waits his or her turn.
+
+once the shop closes, no more clients are allowed in, but the barber has to stay  until everyone who is waiting gets a hair cut.
